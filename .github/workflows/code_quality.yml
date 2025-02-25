@@ -1,0 +1,36 @@
+# This workflow handles general code quality checks such 
+# linting and style checks
+name: Code Quality
+
+# This workflow is callable from other workflows
+on:
+  workflow_call:
+
+jobs: 
+  python-style:
+    name: Python Style 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract branch name
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.extract_branch.outputs.branch }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Run image
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: 2.0.1
+      
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run flake8
+        run: poetry run flake8 .
