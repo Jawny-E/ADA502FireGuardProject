@@ -1,0 +1,31 @@
+# This pipeline handles all basic functions of 
+# a CI pipeline, every job refers to another workflow file
+# to keep structure readable :)
+name: Continuous Integration
+
+# The CI-pipeline will run on pull-requests to main branch
+on: 
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  # General checks of code quality 
+  quality_tests:
+    uses: ./.github/workflows/code_quality.yml
+    secrets: inherit
+
+  # # Tests of isolated source code
+  # unit_tests:
+  #   needs: quality_tests
+
+  # # Collects code from repository and constructs compiled project
+  # build:
+
+  # # Tests of the compiled product
+  # integration_tests:
+  #   needs: unit_tests
+
+  # # Scan for vulnerabilties 
+  # security_scan:
+  #   needs: integration_tests
