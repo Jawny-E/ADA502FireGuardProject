@@ -16,8 +16,9 @@ if __name__ == "__main__":
     obs_delta = datetime.timedelta(days=2)
 
     wd = frc.get_weatherdata_now(location, obs_delta)
-    print (wd)
+    print(wd)
 
     predictions = frc.compute_now(location, obs_delta)
 
     print(predictions)
+    
