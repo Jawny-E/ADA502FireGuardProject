@@ -21,4 +21,3 @@ if __name__ == "__main__":
     predictions = frc.compute_now(location, obs_delta)
 
     print(predictions)
-    
