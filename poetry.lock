@@ -486,11 +486,9 @@ files = [
 ]
 
 [[package]]
-<<<<<<< HEAD
 name = "pymongo"
 version = "4.11.2"
 description = "Python driver for MongoDB <http://www.mongodb.org>"
-=======
 name = "pytest"
 version = "7.4.4"
 description = "pytest: simple powerful testing with Python"
@@ -588,12 +586,10 @@ files = [
 name = "urllib3"
 version = "2.3.0"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
->>>>>>> origin/main
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-<<<<<<< HEAD
     {file = "pymongo-4.11.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:2a5184fd5ff4d96eb7758316646c9cc47ca8b8a8125853a537fe7a47ae50fe51"},
     {file = "pymongo-4.11.2-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:979cc5ea601f1c1c33824bd4550ab4aa71b367cf5206697cc915840cc495dd73"},
     {file = "pymongo-4.11.2-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b08c83538635c04694a22a5b6bf6b8156a3c9bc35bcdfb12de157ad1f0fc4d41"},
@@ -670,7 +666,6 @@ zstd = ["zstandard"]
 lock-version = "2.1"
 python-versions = ">=3.11"
 content-hash = "25e4ec1eac7d8c0709cd883e22d504db29deff6c65efc9fcd4c64c3241c18da3"
-=======
     {file = "urllib3-2.3.0-py3-none-any.whl", hash = "sha256:1cee9ad369867bfdbbb48b7dd50374c0967a0bb7710050facf0dd6911440e3df"},
     {file = "urllib3-2.3.0.tar.gz", hash = "sha256:f8c5449b3cf0861679ce7e0503c7b44b5ec981bec0d1d3795a07f1ba96f0204d"},
 ]
@@ -685,4 +680,3 @@ zstd = ["zstandard (>=0.18.0)"]
 lock-version = "2.1"
 python-versions = ">=3.11, <4.0"
 content-hash = "b18108c544b9cf015dfe4c47b713e1884c9fdf2786495c097dda6d7a15e47361"
->>>>>>> origin/main
