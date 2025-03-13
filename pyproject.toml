@@ -10,6 +10,7 @@ package-mode = false
 python = ">=3.11, <4.0"
 flake8 = "^7.1.2"
 dynamic-frcm = "^1.0.1"
+pymongo = "^4.11.2"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
