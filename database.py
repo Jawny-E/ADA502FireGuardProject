@@ -1,12 +1,24 @@
+import datetime
+import os
 from bson import ObjectId
 from pymongo import MongoClient
 
-# for aa faa mongoDB for python maa kommandoen 'poetry add pymongo' blir kjort
+# poetry self add poetry-plugin-dotenv@latest
+# poetry lock
+# poetry install
+"""
+# add the following to .env file
+MONGO_DB_USERNAME = username
+MONGO_DB_PASSWORD = password
+MONGO_DB_URL = mongodb+srv://${MONGO_DB_USERNAME}:${MONGO_DB_PASSWORD}@fireguardproject.ggfqm.mongodb.net/
+"""
 
-client = MongoClient('mongodb+srv://[USERNAME:PASSWORD]@fireguardproject.ggfqm.mongodb.net/')
-db = client['sample_mflix']
+MONGO_DB_URL = os.environ['MONGO_DB_URL']
+client = MongoClient(MONGO_DB_URL)
+db = client['FireGuardProject']
 
-# Check if 'users' collection exists
+
+# Check if collection exists
 def collection_exists(db, collection_name):
     try:
         # Attempt to list collection names
@@ -18,23 +30,56 @@ def collection_exists(db, collection_name):
     return collection_name in collections
 
 # Check if 'users' collection exists
-if collection_exists(db, 'users'):
-    users_collection = db['users']
-    print("The 'users' collection exists.")
+if collection_exists(db, 'location'):
+    location_collection = db['location']
+    print("The collection exists.")
 else:
-    print("The 'users' collection does not exist.")
+    print("The collection does not exist.")
 
 
 
-def create_user(user_data):
-    result = users_collection.insert_one(user_data)
+def create_location(location_data):
+    try:
+        result = location_collection.insert_one(location_data)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
     return result.inserted_id
 
-def get_user(user_id):
-    return users_collection.find_one({"_id": ObjectId(user_id)})
+def get_location_by_name(location_name):
+    try:
+        location = location_collection.find_one({"name": location_name})
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+    return location
 
+def get_location(location_id):
+    try:
+        location = location_collection.find_one({"_id": ObjectId(location_id)})
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+    return location
 
-user = get_user("59b99db4cfa9a34dcd7885b7")
+# TODO: Finne ut om denne skal bruke name eller id
+def update_location_firerisk(name, firerisk, windspeed):
+    try:
+        location_collection.update_one({"name": name}, {"$set": {"fireRiskPrediction": firerisk, "windspeed": windspeed, "lastModified": datetime.now()}})
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return False
+    return True
 
-print(user.get("name"))
+def delete_location(location_id):
+    try:
+        location_collection.delete_one({"_id": ObjectId(location_id)})
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return False
+    return True
+
+location = get_location("67d9c3c679380d2690688fdd")
+
+print(location)
     
