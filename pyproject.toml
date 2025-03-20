@@ -11,6 +11,8 @@ python = ">=3.11, <4.0"
 flake8 = "^7.1.2"
 dynamic-frcm = "^1.0.1"
 pymongo = "^4.11.2"
+keycloak = "^3.1.5"
+fastapi = "^0.115.11"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
