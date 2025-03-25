@@ -11,6 +11,8 @@ python = ">=3.11, <4.0"
 flake8 = "^7.1.2"
 dynamic-frcm = "^1.0.1"
 pymongo = "^4.11.2"
+fastapi = "^0.115.11"
+uvicorn = {extras = ["standard"], version = "^0.34.0"}
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
