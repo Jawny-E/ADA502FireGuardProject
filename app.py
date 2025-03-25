@@ -8,16 +8,20 @@ from Fireguard_API import get_fire_risk
 
 app = FastAPI()
 
+
 @app.get("/")
 def read_root():
     return {"message": "Hello, FastAPI with Poetry!"}
+
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
-#Location i stedsnavn, har hardkodet Bergen, Stavanger og Oslo som eks.
-#Gir for 1 dag bakover, og 10? dager framover. Fikk ikke lov å velge days_past som 0
+# Location i stedsnavn, har hardkodet Bergen, Stavanger og Oslo som eks.
+# Gir for 1 dag bakover, og 10? dager framover. Fikk ikke lov å velge days_past som 0
+
+
 @app.get("/locations/{location}")
-def fire_risk_endpoint(location: str, days_past: int = 1): 
+def fire_risk_endpoint(location: str, days_past: int = 1):
     return get_fire_risk(location, days_past)

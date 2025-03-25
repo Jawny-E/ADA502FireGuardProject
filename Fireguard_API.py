@@ -27,6 +27,7 @@ frc = METFireRiskAPI()
 
 location = Location(latitude=60.383, longitude=5.3327)  # Bergen
 
+
 def get_fire_risk(loc: str, days_past: int = 1):
     """
     Fetches weather data and fire risk predictions for a given location.
