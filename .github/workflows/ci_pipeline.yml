@@ -15,9 +15,11 @@ jobs:
     uses: ./.github/workflows/code_quality.yml
     secrets: inherit
 
-  # # Tests of isolated source code
-  # unit_tests:
-  #   needs: quality_tests
+  # Tests of isolated source code
+  unit_tests:
+    needs: quality_tests
+    uses: ./.github/workflows/unit_test.yml
+    secrets: inherit
 
   # # Collects code from repository and constructs compiled project
   # build:

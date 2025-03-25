@@ -1,0 +1,40 @@
+# This workflow runs unit-tests from the given directory
+name: Unit tests
+
+# This workflow is callable from other workflows
+on:
+  workflow_call:
+env: Production
+
+jobs: 
+  unit-test:
+    name: Unit Tests 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract branch name
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.extract_branch.outputs.branch }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: 2.0.1
+      
+      - name: Install dependencies
+        run: poetry install
+      
+      - name: Print context
+        run: echo "$TEST_VARIABLE"
+
+      - name: Run unit tests
+        run: python tests/unit_tests.py
