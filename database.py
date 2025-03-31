@@ -29,14 +29,13 @@ def collection_exists(db, collection_name):
 
     return collection_name in collections
 
+
 # Check if 'users' collection exists
 if collection_exists(db, 'location'):
     location_collection = db['location']
     print("The collection exists.")
 else:
     print("The collection does not exist.")
-
-
 
 def create_location(location_data):
     try:
@@ -84,4 +83,3 @@ def delete_location(location_id):
 location = get_location("67d9c3c679380d2690688fdd")
 
 print(location)
-    
