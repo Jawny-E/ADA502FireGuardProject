@@ -62,10 +62,12 @@ def get_location(location_id):
         return None
     return location
 
-# TODO: Finne ut om denne skal bruke name eller id
 def update_location_firerisk(name, firerisk, windspeed):
     try:
-        location_collection.update_one({"name": name}, {"$set": {"fireRiskPrediction": firerisk, "windspeed": windspeed, "lastModified": datetime.now()}})
+        location_collection.update_one({"name": name}, 
+        {"$set": {"fireRiskPrediction": firerisk, 
+                  "windspeed": windspeed, 
+                  "lastModified": datetime.now()}})
     except Exception as e:
         print(f"An error occurred: {e}")
         return False
