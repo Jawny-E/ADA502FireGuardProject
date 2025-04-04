@@ -2,6 +2,9 @@ import datetime
 import os
 from bson import ObjectId
 from pymongo import MongoClient
+import requests
+from requests.auth import HTTPBasicAuth
+from pymongo import UpdateOne
 
 # poetry self add poetry-plugin-dotenv@latest
 # poetry lock
@@ -29,13 +32,13 @@ def collection_exists(db, collection_name):
 
     return collection_name in collections
 
-
 # Check if 'users' collection exists
 if collection_exists(db, 'location'):
     location_collection = db['location']
-    print("The collection exists.")
 else:
     print("The collection does not exist.")
+
+
 
 def create_location(location_data):
     try:
@@ -61,12 +64,11 @@ def get_location(location_id):
         return None
     return location
 
-def update_location_firerisk(name, firerisk, windspeed):
+def update_location_firerisk(name, fire_risk):
     try:
         location_collection.update_one({"name": name}, 
-        {"$set": {"fireRiskPrediction": firerisk, 
-                  "windspeed": windspeed, 
-                  "lastModified": datetime.now()}})
+        {"$set": {"fireRiskPrediction": fire_risk, 
+                  "lastModified": datetime.date.today().isoformat()}})
     except Exception as e:
         print(f"An error occurred: {e}")
         return False
@@ -80,6 +82,12 @@ def delete_location(location_id):
         return False
     return True
 
-location = get_location("67d9c3c679380d2690688fdd")
-
-print(location)
+create_location({
+    "name": "Hjelmeland",
+    "coordinates": {
+        "latitude": 59.1302,
+        "longitude": 6.2740
+    },
+    "fireRiskPrediction": None,
+    "lastModified": None
+})
