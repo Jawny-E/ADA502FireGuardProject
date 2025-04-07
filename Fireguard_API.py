@@ -9,6 +9,7 @@ import numpy as np
 # Initialize the Fire Risk API
 frc = METFireRiskAPI()
 
+
 def get_fire_risk(loc: str, days_past: int = 7, weatherdata: bool = False):
     """
     Fetches weather data and fire risk predictions for a given location.
@@ -18,11 +19,11 @@ def get_fire_risk(loc: str, days_past: int = 7, weatherdata: bool = False):
     location_db = get_location_by_name(loc)
     if location_db is None:
         return {"error": "Location not found in the database."}
-    
+
     coordinates = location_db["coordinates"]
     location = Location(latitude=coordinates["latitude"], longitude=coordinates["longitude"])
     obs_delta = datetime.timedelta(days=days_past)
-    
+
     lastModified = location_db.get("lastModified")
     beenModified = False
     if lastModified and lastModified == date.today().isoformat():
@@ -33,24 +34,25 @@ def get_fire_risk(loc: str, days_past: int = 7, weatherdata: bool = False):
             }
 
     try:
-            fire_risk = frc.compute_now(location, obs_delta)
+        fire_risk = frc.compute_now(location, obs_delta)
 
-            fire_risk_dict= serialize_fire_risk_prediction(fire_risk)
-            update_location_firerisk(loc, fire_risk_dict)
-            if not beenModified:
-                data =  {
-                    "location": {"name": loc, "latitude": location.latitude, "longitude": location.longitude},
-                    "fireRiskPrediction": fire_risk
-                }
+        fire_risk_dict = serialize_fire_risk_prediction(fire_risk)
+        update_location_firerisk(loc, fire_risk_dict)
+        if not beenModified:
+            data = {
+                "location": {"name": loc, "latitude": location.latitude, "longitude": location.longitude},
+                "fireRiskPrediction": fire_risk
+            }
 
-            if(weatherdata):
-                raw_weatherdata = frc.get_weatherdata_now(location, obs_delta)
-                data["weatherdata"] = clean_data(raw_weatherdata)
+        if (weatherdata):
+            raw_weatherdata = frc.get_weatherdata_now(location, obs_delta)
+            data["weatherdata"] = clean_data(raw_weatherdata)
 
-            return data
+        return data
     except Exception as e:
         return {"Problem fetching fire risk prediction, error: " + str(e)}
-    
+
+
 def clean_data(data):
     """
     Recursively clean data by replacing NaN values with "Not Available".
@@ -67,7 +69,8 @@ def clean_data(data):
         return {key: clean_data(value) for key, value in vars(data).items()}
     else:
         return data
-    
+
+
 def serialize_fire_risk_prediction(fire_risk_prediction):
     """
     Serializes a FireRiskPrediction object into a dictionary using clean_data.
@@ -81,6 +84,7 @@ def serialize_fire_risk_prediction(fire_risk_prediction):
     return {
         "firerisks": serialized_firerisk_list
     }
+
 
 def get_fire_risk_trends(loc: str):
     fire_risk_data = get_fire_risk(loc, 7, False)

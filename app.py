@@ -1,4 +1,3 @@
-from typing import Union
 from fastapi import FastAPI
 from Fireguard_API import get_fire_risk, get_fire_risk_trends
 
@@ -10,6 +9,7 @@ app = FastAPI()
 
 
 EXCLUDE_PATHS = {"/", "/openapi.json", "/docs", "/docs/oauth2-redirect", "/redoc"}
+
 
 @app.get("/")
 async def list_routes():
@@ -24,6 +24,7 @@ async def list_routes():
 @app.get("/locations/{location}")
 def fire_risk_endpoint(location: str, days_past: int = 7, weatherdata: bool = False):
     return get_fire_risk(location, days_past, weatherdata)
+
 
 @app.get("/locations/{location}/trends")
 def fire_risk__trends_endpoint(location: str):
