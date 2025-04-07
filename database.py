@@ -33,9 +33,9 @@ def collection_exists(db, collection_name):
 # Check if 'users' collection exists
 if collection_exists(db, 'location'):
     location_collection = db['location']
-    print("The collection exists.")
 else:
     print("The collection does not exist.")
+
 
 def create_location(location_data):
     try:
@@ -45,6 +45,7 @@ def create_location(location_data):
         return None
     return result.inserted_id
 
+
 def get_location_by_name(location_name):
     try:
         location = location_collection.find_one({"name": location_name})
@@ -52,6 +53,7 @@ def get_location_by_name(location_name):
         print(f"An error occurred: {e}")
         return None
     return location
+
 
 def get_location(location_id):
     try:
@@ -61,16 +63,17 @@ def get_location(location_id):
         return None
     return location
 
-def update_location_firerisk(name, firerisk, windspeed):
+
+def update_location_firerisk(name, fire_risk):
     try:
-        location_collection.update_one({"name": name}, 
-        {"$set": {"fireRiskPrediction": firerisk, 
-                  "windspeed": windspeed, 
-                  "lastModified": datetime.now()}})
+        location_collection.update_one({"name": name},
+                                       {"$set": {"fireRiskPrediction": fire_risk,
+                                        "lastModified": datetime.date.today().isoformat()}})
     except Exception as e:
         print(f"An error occurred: {e}")
         return False
     return True
+
 
 def delete_location(location_id):
     try:
@@ -80,6 +83,13 @@ def delete_location(location_id):
         return False
     return True
 
-location = get_location("67d9c3c679380d2690688fdd")
 
-print(location)
+create_location({
+    "name": "Hjelmeland",
+    "coordinates": {
+        "latitude": 59.1302,
+        "longitude": 6.2740
+    },
+    "fireRiskPrediction": None,
+    "lastModified": None
+})
