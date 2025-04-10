@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from Fireguard_API import get_fire_risk, get_fire_risk_trends
+from .Fireguard_API import get_fire_risk, get_fire_risk_trends
 
 
 # For å starte serveren : "poetry run uvicorn app:app --reload" i terminal
