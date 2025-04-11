@@ -14,7 +14,7 @@ def get_fire_risk(loc: str, days_past: int = 7, weatherdata: bool = False):
     """
     Fetches weather data and fire risk predictions for a given location.
     """
-
+    loc = loc.capitalize()
     # Define the location with their latitude and longitude
     location_db = get_location_by_name(loc)
     if location_db is None:
