@@ -1,6 +1,6 @@
-# This workflow handles general code quality checks such 
-# linting and style checks
-name: Code Quality
+# This workflow handles general unit testing of code
+# using poetry and pytest for the project
+name: Pytest and Unit test
 
 # This workflow is callable from other workflows
 on:
@@ -35,4 +35,4 @@ jobs:
 
       - name: Run flake8
         working-directory: API
-        run: poetry run flake8 fireguard_app --max-line-length=120
+        run: poetry run pytest

@@ -1,3 +1,4 @@
+# The main application controlling the FastAPI
 from fastapi import FastAPI
 from .Fireguard_API import get_fire_risk, get_fire_risk_trends
 
@@ -12,6 +13,7 @@ app = FastAPI()
 EXCLUDE_PATHS = {"/", "/openapi.json", "/docs", "/docs/oauth2-redirect", "/redoc"}
 
 
+# Base URL
 @app.get("/")
 async def list_routes():
     routes = {}
