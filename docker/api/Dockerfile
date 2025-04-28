@@ -22,7 +22,7 @@ WORKDIR /app
 USER app
 COPY --from=builder --chown=1000:1000 /app/dist .
 COPY --from=builder --chown=1000:1000 /app/.env .env
-RUN pip install fireguard_api-0.1.0-py3-none-any.whl
+RUN pip install fireguard_app-0.1.0-py3-none-any.whl
 ENV PATH="/app/.local/bin:${PATH}"
 EXPOSE 8000
-ENTRYPOINT ["uvicorn", "fireguard_api.app:app", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["uvicorn", "fireguard_app.app:app", "--host", "0.0.0.0", "--port", "8000"]

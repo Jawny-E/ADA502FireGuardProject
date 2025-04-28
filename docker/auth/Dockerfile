@@ -1,14 +1,8 @@
-FROM quay.io/keycloak/keycloak:latest AS builder
+FROM quay.io/keycloak/keycloak:24.0.4
 
-# Configure a database vendor
-ENV KC_DB=postgres
+# Optional: if you want to keep using the version from your existing config, set ARG
+ARG KC_VERSION=24.0.4
 
-WORKDIR /opt/keycloak
-# for demonstration purposes only, please make sure to use proper certificates in production instead
-RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=server" -alias server -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -keystore conf/server.keystore
-RUN /opt/keycloak/bin/kc.sh build
+COPY docker/auth/base_realm.json /opt/keycloak/data/import/realm.json
 
-FROM quay.io/keycloak/keycloak:latest
-COPY --from=builder /opt/keycloak/ /opt/keycloak/
-
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start-dev", "--import-realm"]
