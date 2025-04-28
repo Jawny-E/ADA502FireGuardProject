@@ -106,6 +106,7 @@ def verify_role(roles: list, role: str) -> bool:
             detail="Unauthorized action",
             headers={"WWW-Authenticate": "Bearer"}
         )
+    
 
 def verify_user_path(req: Request, user: User = Depends(get_user_info)):
     rpath: str = req.url.path
@@ -113,6 +114,7 @@ def verify_user_path(req: Request, user: User = Depends(get_user_info)):
     paths: list = user.locations
     print(paths)
     return verify_path(paths, rpath)
+
 
 def verify_user_locquery(req: Request, user: User = Depends(get_user_info)):
     rquery: str = req.url.query
@@ -126,6 +128,7 @@ def verify_user_locquery(req: Request, user: User = Depends(get_user_info)):
     else:
         return False
 
+
 def verify_path(paths: list, path: str):
     try:
         paths.index(path)
@@ -135,6 +138,7 @@ def verify_path(paths: list, path: str):
             detail=f'Not authorized to access this sensor(s): {path} ',
             headers={"WWW-Authenticate": "Bearer"}
         )
+
 
 def verify_parameters(user_parameters: list, query_parameters: list):
     sparam = set(user_parameters)
@@ -151,3 +155,4 @@ def verify_parameters(user_parameters: list, query_parameters: list):
             detail=f'Not authorized to access these parameters:{ssdiff} ',
             headers={"WWW-Authenticate": "Bearer"}
         )
+    

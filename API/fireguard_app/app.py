@@ -1,8 +1,7 @@
 # The main application controlling the FastAPI
 from fastapi import FastAPI, Depends, status
 from .Fireguard_API import get_fire_risk, get_fire_risk_trends
-from .kc.auth import verify_admin_role, verify_user_role, verify_sadmin_role, verify_suser_role, verify_user_path, verify_user_locquery
-
+from .kc.auth import *
 
 # For å starte serveren : "poetry run uvicorn app:app --reload" i terminal
 # Eventuelt uten reload (Om du får problemer når du allerede har startet serveren)
@@ -10,9 +9,7 @@ from .kc.auth import verify_admin_role, verify_user_role, verify_sadmin_role, ve
 
 app = FastAPI()
 
-
 EXCLUDE_PATHS = {"/", "/openapi.json", "/docs", "/docs/oauth2-redirect", "/redoc"}
-
 
 # Base URL
 @app.get("/")
@@ -59,9 +56,11 @@ def protected_suser(user: bool = Depends(verify_suser_role)):
 def public_user():
     return {"message": "This is a public resource for everyone."}
 
+
 @app.get("/api/v1/")
 def protected_user_query(user: bool = Depends(verify_user_locquery)):
     return {"message": "This is a protected resource for any user that is registered on a location."}
+
 
 @app.get("/api/v1/{location}")
 def protected_user_loc(location: str, user: bool = Depends(verify_user_path)):

@@ -9,3 +9,4 @@ class User(BaseModel):
     realm_roles: list
     client_roles: list
     locations: list
+    
