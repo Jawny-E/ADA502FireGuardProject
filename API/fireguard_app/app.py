@@ -1,7 +1,7 @@
 # The main application controlling the FastAPI
 from fastapi import FastAPI, Depends, status
 from .Fireguard_API import get_fire_risk, get_fire_risk_trends
-from .kc.auth import *
+from .kc.auth import verify_admin_role, verify_user_role, verify_sadmin_role, verify_suser_role, verify_user_path, verify_user_locquery
 
 # For å starte serveren : "poetry run uvicorn app:app --reload" i terminal
 # Eventuelt uten reload (Om du får problemer når du allerede har startet serveren)

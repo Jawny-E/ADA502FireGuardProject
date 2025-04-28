@@ -13,6 +13,7 @@ keycloak_openid = KeycloakOpenID(
     client_id=""
 )
 
+
 # Get Token from HTTP Request object of the restapi endpoint
 def get_jwttoken(req: Request):
     token = req.headers["Authorization"]
@@ -58,9 +59,9 @@ async def get_user_info(payload: dict = Depends(get_payload)) -> User:
             username=payload.get("preferred_username"),
             first_name=payload.get("given_name"),
             last_name=payload.get("family_name"),
-            realm_roles=payload.get("realm_access", {}).get("roles", []),
-            client_roles=payload.get("resource_access", {}).get(client_id, {}).get("roles", []),
-            locations = payload.get("location", [])
+            realm_roles=payload.get("realm_access",{}).get("roles",[]),
+            client_roles=payload.get("resource_access",{}).get(client_id,{}).get("roles",[]),
+            locations = payload.get("location",[])
         )
     except Exception as e:
         raise HTTPException(
@@ -106,7 +107,7 @@ def verify_role(roles: list, role: str) -> bool:
             detail="Unauthorized action",
             headers={"WWW-Authenticate": "Bearer"}
         )
-    
+
 
 def verify_user_path(req: Request, user: User = Depends(get_user_info)):
     rpath: str = req.url.path
