@@ -2,7 +2,7 @@ from datetime import date
 import datetime
 from frcm.frcapi import METFireRiskAPI
 from frcm.datamodel.model import Location
-from .database import get_location_by_name, update_location_firerisk
+from .db_locations.crud import get_location_by_name, update_location_firerisk
 import math
 import numpy as np
 
