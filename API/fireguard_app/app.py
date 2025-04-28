@@ -11,6 +11,7 @@ app = FastAPI()
 
 EXCLUDE_PATHS = {"/", "/openapi.json", "/docs", "/docs/oauth2-redirect", "/redoc"}
 
+
 # Base URL
 @app.get("/")
 async def list_routes():

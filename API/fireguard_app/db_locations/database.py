@@ -8,14 +8,10 @@ class DatabaseClient:
         username: str,
         password: str,
         cluster_url: str,
-        database_name: str
+        database_name: str,
+        collection_name: str
     ):
-        self.database_name = database_name
         self.mongo_url = f"mongodb+srv://{username}:{password}@{cluster_url}/?retryWrites=true&w=majority"
         self.client = MongoClient(self.mongo_url)
-
-    def get_database(self):
-        return self.client[self.database_name]
-
-    def get_collection(self, name: str):
-        return self.get_database()[name]
+        self.db = self.client[database_name]
+        self.collection = self.db[collection_name]

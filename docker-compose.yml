@@ -34,7 +34,7 @@ services:
     networks:
       - internal_net
 
-  fireguard_api:
+  fireguard_app:
     build:
       context: .
       dockerfile: docker/api/Dockerfile
