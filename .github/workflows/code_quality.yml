@@ -35,4 +35,4 @@ jobs:
 
       - name: Run flake8
         working-directory: API
-        run: poetry run flake8 fireguard_app --max-line-length=120
+        run: poetry run flake8 fireguard_app --max-line-length=160

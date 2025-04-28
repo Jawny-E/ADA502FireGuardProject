@@ -59,9 +59,9 @@ async def get_user_info(payload: dict = Depends(get_payload)) -> User:
             username=payload.get("preferred_username"),
             first_name=payload.get("given_name"),
             last_name=payload.get("family_name"),
-            realm_roles=payload.get("realm_access",{}).get("roles",[]),
-            client_roles=payload.get("resource_access",{}).get(client_id,{}).get("roles",[]),
-            locations = payload.get("location",[])
+            realm_roles=payload.get("realm_access", {}).get("roles", []),
+            client_roles=payload.get("resource_access", {}).get(client_id, {}).get("roles", []),
+            locations=payload.get("location", [])
         )
     except Exception as e:
         raise HTTPException(
@@ -101,7 +101,7 @@ def verify_role(roles: list, role: str) -> bool:
     try:
         roles.index(role)
         return True
-    except Exception as e:
+    except Exception:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized action",
@@ -133,7 +133,7 @@ def verify_user_locquery(req: Request, user: User = Depends(get_user_info)):
 def verify_path(paths: list, path: str):
     try:
         paths.index(path)
-    except Exception as e:
+    except Exception:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f'Not authorized to access this sensor(s): {path} ',
@@ -150,10 +150,9 @@ def verify_parameters(user_parameters: list, query_parameters: list):
         sdiff = query_parameters
     try:
         user_parameters.index(sdiff.pop(0))
-    except Exception as e:
+    except Exception:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f'Not authorized to access these parameters:{ssdiff} ',
             headers={"WWW-Authenticate": "Bearer"}
         )
-    

@@ -1,22 +1,33 @@
 from datetime import date
 import datetime
+import os
 from frcm.frcapi import METFireRiskAPI
 from frcm.datamodel.model import Location
-from .db_locations.crud import get_location_by_name, update_location_firerisk
+from .db_locations.database import DatabaseClient
+from .db_locations.crud import LocationOperations
 import math
 import numpy as np
 
 # Initialize the Fire Risk API
 frc = METFireRiskAPI()
 
+myClient = DatabaseClient(
+    username=os.environ['MONGO_DB_USERNAME'],
+    password=os.environ['MONGO_DB_PASSWORD'],
+    cluster_url="fireguardproject.ggfqm.mongodb.net",
+    database_name="FireGuardProject",
+    collection_name="location"
+)
+operator_db = LocationOperations(myClient.collection)
+
 
 def get_fire_risk(loc: str, days_past: int = 7, weatherdata: bool = False):
     """
     Fetches weather data and fire risk predictions for a given location.
     """
-
+    loc = loc.capitalize()
     # Define the location with their latitude and longitude
-    location_db = get_location_by_name(loc)
+    location_db = operator_db.get_location_by_name(loc)
     if location_db is None:
         return {"error": "Location not found in the database."}
 
@@ -37,7 +48,7 @@ def get_fire_risk(loc: str, days_past: int = 7, weatherdata: bool = False):
         fire_risk = frc.compute_now(location, obs_delta)
 
         fire_risk_dict = serialize_fire_risk_prediction(fire_risk)
-        update_location_firerisk(loc, fire_risk_dict)
+        operator_db.update_location_firerisk(loc, fire_risk_dict)
         if not beenModified:
             data = {
                 "location": {"name": loc, "latitude": location.latitude, "longitude": location.longitude},
