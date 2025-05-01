@@ -1,23 +1,23 @@
 from decouple import config
-from keycloak import KeycloakOpenID
+from get_token import Keycloak_openid
 from fastapi import HTTPException, status, Depends, Request
 
 from .models import User
 
-server_url_env = config("Server_url")  # Use config to read from .env
-server_realm = config("realm")        # Use config to read from .env
+#server_url_env = config("Server_url")  # Use config to read from .env
+#server_realm = config("realm")        # Use config to read from .env
 
-keycloak_openid = KeycloakOpenID(
-    server_url=server_url_env,       # Use the variables read via config
-    realm_name=server_realm,         # Use the variables read via config
-    client_id=""
-)
-
-
+'''
 # Get Token from HTTP Request object of the restapi endpoint
 def get_jwttoken(req: Request):
-    token = req.headers["Authorization"]
-    token = token.split(" ").pop(1)
+    authorization = req.headers.get("Authorization")
+    if not authorization:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authorization header missing",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+    token = authorization.split(" ").pop(1)
     print(token)
     return token
 
@@ -25,7 +25,7 @@ def get_jwttoken(req: Request):
 async def get_idp_public_key():
     return (
         "-----BEGIN PUBLIC KEY-----\n"
-        f"{keycloak_openid.public_key()}"
+        f"{Keycloak_openid.public_key()}"
         "\n-----END PUBLIC KEY-----"
     )
 
@@ -33,7 +33,7 @@ async def get_idp_public_key():
 # Decode Token
 async def get_payload(token=Depends(get_jwttoken)) -> dict:
     try:
-        return keycloak_openid.decode_token(
+        return Keycloak_openid.decode_token(
             token,
             key=await get_idp_public_key(),
             options={
@@ -156,3 +156,4 @@ def verify_parameters(user_parameters: list, query_parameters: list):
             detail=f'Not authorized to access these parameters:{ssdiff} ',
             headers={"WWW-Authenticate": "Bearer"}
         )
+'''

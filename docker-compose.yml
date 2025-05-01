@@ -46,6 +46,8 @@ services:
       - keycloak
     networks:
       - internal_net
+    env_file:
+      - .env
 
 volumes:
   postgres_data:
