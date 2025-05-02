@@ -40,15 +40,16 @@ def protected_user(user: bool = Depends(verify_user_role)):
 
 @app.get('/public', status_code=status.HTTP_200_OK)
 def public_user():
-    return {"message": "This is an API for ready-to-go calculated firerisks in geographic areas in Norway." \
-      + " You want to know more? Here is a mail"}
+    return {"message": "This is an API for ready-to-go calculated firerisks in geographic areas in Norway."
+          + " You want to know more? Here is a mail"}
 
 
 '''
-Not yet implemented admin role 
+Not yet implemented admin role
 @app.get('/admin')
 def protected_user(user: bool = Depends(verify_user_role)):
     return {"message": "This is a protected resource for ADMIN role."}
+
 
 The original function for getting locations
 @app.get("/locations/{location}")
