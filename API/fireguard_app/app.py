@@ -24,7 +24,7 @@ async def list_routes():
 
 
 @app.get('/api/{location}')
-def protected_user(location: str, days_past: int = 7, weatherdata: bool = False, user: bool = Depends(verify_user_role)):
+def protected_user_location(location: str, days_past: int = 7, weatherdata: bool = False, user: bool = Depends(verify_user_role)):
     return get_fire_risk(location, days_past, weatherdata)
 
 
@@ -41,7 +41,7 @@ def protected_user(user: bool = Depends(verify_user_role)):
 @app.get('/public', status_code=status.HTTP_200_OK)
 def public_user():
     return {"message": "This is an API for ready-to-go calculated firerisks in geographic areas in Norway."
-          + " You want to know more? Here is a mail"}
+            + " You want to know more? Here is a mail"}
 
 
 '''
