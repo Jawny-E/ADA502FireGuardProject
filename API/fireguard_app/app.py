@@ -1,7 +1,7 @@
 # The main application controlling the FastAPI
 from fastapi import FastAPI, Depends, status
 from .Fireguard_API import get_fire_risk, get_fire_risk_trends
-from .kc.auth import verify_admin_role, verify_user_role, verify_user_path, verify_user_locquery
+from .kc.auth import verify_user_role
 
 # For å starte serveren : "poetry run uvicorn app:app --reload" i terminal
 # Eventuelt uten reload (Om du får problemer når du allerede har startet serveren)
@@ -40,7 +40,8 @@ def protected_user(user: bool = Depends(verify_user_role)):
 
 @app.get('/public', status_code=status.HTTP_200_OK)
 def public_user():
-    return {"message": "This is an API for ready-to-go calculated firerisks in geographic areas in Norway. You want to know more? Here is a mail"}
+    return {"message": "This is an API for ready-to-go calculated firerisks in geographic areas in Norway." \
+      + " You want to know more? Here is a mail"}
 
 
 '''

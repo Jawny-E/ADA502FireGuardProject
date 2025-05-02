@@ -4,12 +4,12 @@ from fastapi import HTTPException, status, Depends, Request
 from .models import User
 
 
-
 keycloak_openid = KeycloakOpenID(
     server_url=config("Server_url"),
     realm_name=config("realm"),
     client_id=""
 )
+
 
 # Get Token from HTTP Request object of the restapi endpoint
 def get_jwttoken(req: Request):
