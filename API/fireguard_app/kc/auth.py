@@ -1,13 +1,16 @@
 from decouple import config
-from get_token import Keycloak_openid
+from keycloak import KeycloakOpenID
 from fastapi import HTTPException, status, Depends, Request
-
 from .models import User
 
-#server_url_env = config("Server_url")  # Use config to read from .env
-#server_realm = config("realm")        # Use config to read from .env
 
-'''
+
+keycloak_openid = KeycloakOpenID(
+    server_url=config("Server_url"),
+    realm_name=config("realm"),
+    client_id=""
+)
+
 # Get Token from HTTP Request object of the restapi endpoint
 def get_jwttoken(req: Request):
     authorization = req.headers.get("Authorization")
@@ -25,7 +28,7 @@ def get_jwttoken(req: Request):
 async def get_idp_public_key():
     return (
         "-----BEGIN PUBLIC KEY-----\n"
-        f"{Keycloak_openid.public_key()}"
+        f"{keycloak_openid.public_key()}"
         "\n-----END PUBLIC KEY-----"
     )
 
@@ -33,14 +36,9 @@ async def get_idp_public_key():
 # Decode Token
 async def get_payload(token=Depends(get_jwttoken)) -> dict:
     try:
-        return Keycloak_openid.decode_token(
+        return keycloak_openid.decode_token(
             token,
-            key=await get_idp_public_key(),
-            options={
-                "verify_signature": True,
-                "verify_iss": True,
-                "verify_exp": True
-            }
+            key=None
         )
     except Exception as e:
         raise HTTPException(
@@ -61,7 +59,7 @@ async def get_user_info(payload: dict = Depends(get_payload)) -> User:
             last_name=payload.get("family_name"),
             realm_roles=payload.get("realm_access", {}).get("roles", []),
             client_roles=payload.get("resource_access", {}).get(client_id, {}).get("roles", []),
-            locations=payload.get("location", [])
+            levelOfUser=payload.get("levelOfUser", [])
         )
     except Exception as e:
         raise HTTPException(
@@ -75,26 +73,26 @@ def verify_admin_role(user: User = Depends(get_user_info)) -> bool:
     roles: list = user.realm_roles
     roles.extend(user.client_roles)
     print(roles)
-    return verify_role(roles, "ADMIN")
+    return verify_role(roles, "Admin")
 
 
 def verify_sadmin_role(user: User = Depends(get_user_info)) -> bool:
     roles: list = user.realm_roles
     roles.extend(user.client_roles)
     print(roles)
-    return verify_role(roles, "APP_ADMIN")
+    return verify_role(roles, "API_admin")
 
 
 def verify_user_role(user: User = Depends(get_user_info)) -> bool:
     roles: list = user.realm_roles
     roles.extend(user.client_roles)
-    return verify_role(roles, "APP_USER")
+    return verify_role(roles, "User")
 
 
 def verify_suser_role(user: User = Depends(get_user_info)) -> bool:
     roles: list = user.realm_roles
     roles.extend(user.client_roles)
-    return verify_role(roles, "APP_USER")
+    return verify_role(roles, "API_users")
 
 
 def verify_role(roles: list, role: str) -> bool:
@@ -112,7 +110,7 @@ def verify_role(roles: list, role: str) -> bool:
 def verify_user_path(req: Request, user: User = Depends(get_user_info)):
     rpath: str = req.url.path
     print(rpath)
-    paths: list = user.locations
+    paths: list = user.levelOfUser
     print(paths)
     return verify_path(paths, rpath)
 
@@ -123,7 +121,7 @@ def verify_user_locquery(req: Request, user: User = Depends(get_user_info)):
     if len(rquery) > 0:
         qparam = rquery.split("=").pop(1).split(",")
         print(qparam)
-        parameters: list = user.locations
+        parameters: list = user.levelOfUser
         print(parameters)
         return verify_parameters(parameters, qparam)
     else:
@@ -156,4 +154,3 @@ def verify_parameters(user_parameters: list, query_parameters: list):
             detail=f'Not authorized to access these parameters:{ssdiff} ',
             headers={"WWW-Authenticate": "Bearer"}
         )
-'''
