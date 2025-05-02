@@ -16,6 +16,11 @@ RUN /root/.local/bin/poetry build
 
 ##### compile stage #####
 FROM python:3.12-alpine
+
+# Add curl here in root context
+USER root
+RUN apk update && apk add --no-cache curl
+
 RUN addgroup -g 1000 app && adduser -G app -D -u 1000 -h /app app
 
 WORKDIR /app

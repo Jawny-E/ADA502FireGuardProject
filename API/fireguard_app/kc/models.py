@@ -8,4 +8,4 @@ class User(BaseModel):
     last_name: str
     realm_roles: list
     client_roles: list
-    locations: list
+    levelOfUser: list
