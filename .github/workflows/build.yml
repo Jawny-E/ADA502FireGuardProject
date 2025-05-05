@@ -1,0 +1,52 @@
+# This workflow handles building and
+# storing custom Docker images
+name: Docker build
+
+# This workflow is callable from other workflows
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        required: true
+        type: string
+        description: 'Name of image to be built'
+      docker_subfolder:
+        required: true
+        type: string
+        description: 'Subfolder of docker/ where the Dockerfile is stored'
+      branch:
+        required: false
+        type: string
+        description: 'Branch to build from (defaults to calling branch)'
+
+jobs:
+  build_and_push_image:
+    name: Build and push Docker images 
+    runs-on: ubuntu-latest
+   
+    steps:
+      - name: Extract branch name
+        run: |
+          if [ -z "${{ inputs.branch }}" ]; then
+            echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+          else
+            echo "branch=${{ inputs.branch }}" >> $GITHUB_OUTPUT
+          fi
+        id: extract_branch
+
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.extract_branch.outputs.branch }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME}}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      
+      - name: Build Docker image
+        run: docker build -f docker/${{ inputs.docker_subfolder }}/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.image_name }}:dev .
+      
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.image_name }}:dev
