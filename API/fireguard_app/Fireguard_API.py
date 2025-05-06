@@ -7,6 +7,7 @@ from .db_locations.database import DatabaseClient
 from .db_locations.crud import LocationOperations
 import math
 import numpy as np
+import requests
 
 # Initialize the Fire Risk API
 frc = METFireRiskAPI()
@@ -24,12 +25,25 @@ operator_db = LocationOperations(myClient.collection)
 def get_fire_risk(loc: str, days_past: int = 7, weatherdata: bool = False):
     """
     Fetches weather data and fire risk predictions for a given location.
+    Adds the location to the database if it doesn't exist.
+    :param loc: The location name (e.g., "Oslo")
     """
     loc = loc.capitalize()
     # Define the location with their latitude and longitude
     location_db = operator_db.get_location_by_name(loc)
     if location_db is None:
-        return {"error": "Location not found in the database."}
+        try:
+            coordinates = get_coordinates_from_StedsnavnAPI(loc)
+            new_location = {
+                "name": loc,
+                "coordinates": coordinates,
+                "fireRiskPrediction": None,
+                "lastModified": None,
+            }
+            operator_db.create_location(new_location)
+        except:
+            return {"error": f"Location {loc} not found in StedsnavnAPI."}
+        location_db = operator_db.get_location_by_name(loc)
 
     coordinates = location_db["coordinates"]
     location = Location(latitude=coordinates["latitude"], longitude=coordinates["longitude"])
@@ -45,11 +59,10 @@ def get_fire_risk(loc: str, days_past: int = 7, weatherdata: bool = False):
             }
 
     try:
-        fire_risk = frc.compute_now(location, obs_delta)
-
-        fire_risk_dict = serialize_fire_risk_prediction(fire_risk)
-        operator_db.update_location_firerisk(loc, fire_risk_dict)
         if not beenModified:
+            fire_risk = frc.compute_now(location, obs_delta)
+            fire_risk_dict = serialize_fire_risk_prediction(fire_risk)
+            operator_db.update_location_firerisk(loc, fire_risk_dict)
             data = {
                 "location": {"name": loc, "latitude": location.latitude, "longitude": location.longitude},
                 "fireRiskPrediction": fire_risk
@@ -126,3 +139,41 @@ def get_fire_risk_trends(loc: str):
     }
 
     return trends
+
+def get_coordinates_from_StedsnavnAPI(location_name, kommunenavn=None):
+
+    url = "https://ws.geonorge.no/stedsnavn/v1/navn"
+    params = {
+        "sok": location_name,
+        "treffPerSide": 10, 
+    }
+    response = requests.get(url, params=params)
+    if response.status_code == 200:
+        data = response.json()
+        places =data.get("navn", [])
+        if kommunenavn:
+            kommunenavn.capitalize()
+            for place in places:
+            # Check if any kommune in the place has the matching kommunenavn
+                if any(kommune.get("kommunenavn") == kommunenavn for kommune in place.get("kommuner", [])):
+                    place = place
+                    break
+                else:
+                    place = None
+        else:
+            place = places[0] if places else None
+
+    if place:
+            representasjonspunkt = place.get("representasjonspunkt", {})
+            if representasjonspunkt:
+                latitude = representasjonspunkt.get("nord")
+                longitude = representasjonspunkt.get("øst")
+                if latitude is not None and longitude is not None:
+                    return {
+                        "latitude": latitude,
+                        "longitude": longitude,
+                    }
+                else:
+                    return None
+    else:
+            return None
