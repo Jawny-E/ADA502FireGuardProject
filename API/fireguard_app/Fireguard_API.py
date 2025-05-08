@@ -41,8 +41,8 @@ def get_fire_risk(loc: str, days_past: int = 7, weatherdata: bool = False):
                 "lastModified": None,
             }
             operator_db.create_location(new_location)
-        except:
-            return {"error": f"Location {loc} not found in StedsnavnAPI."}
+        except Exception as e:
+            return {"error": f"Location {loc} not found in StedsnavnAPI. Error: {str(e)}"}
         location_db = operator_db.get_location_by_name(loc)
 
     coordinates = location_db["coordinates"]
@@ -140,21 +140,22 @@ def get_fire_risk_trends(loc: str):
 
     return trends
 
+
 def get_coordinates_from_StedsnavnAPI(location_name, kommunenavn=None):
 
     url = "https://ws.geonorge.no/stedsnavn/v1/navn"
     params = {
         "sok": location_name,
-        "treffPerSide": 10, 
+        "treffPerSide": 10,
     }
     response = requests.get(url, params=params)
     if response.status_code == 200:
-        data = response.json()
+        data = response.json() 
         places =data.get("navn", [])
         if kommunenavn:
             kommunenavn.capitalize()
             for place in places:
-            # Check if any kommune in the place has the matching kommunenavn
+                # Check if any kommune in the place has the matching kommunenavn
                 if any(kommune.get("kommunenavn") == kommunenavn for kommune in place.get("kommuner", [])):
                     place = place
                     break
@@ -163,7 +164,7 @@ def get_coordinates_from_StedsnavnAPI(location_name, kommunenavn=None):
         else:
             place = places[0] if places else None
 
-    if place:
+        if place:
             representasjonspunkt = place.get("representasjonspunkt", {})
             if representasjonspunkt:
                 latitude = representasjonspunkt.get("nord")
@@ -175,5 +176,5 @@ def get_coordinates_from_StedsnavnAPI(location_name, kommunenavn=None):
                     }
                 else:
                     return None
-    else:
+        else:
             return None
