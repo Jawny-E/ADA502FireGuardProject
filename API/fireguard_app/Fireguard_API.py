@@ -150,8 +150,8 @@ def get_coordinates_from_StedsnavnAPI(location_name, kommunenavn=None):
     }
     response = requests.get(url, params=params)
     if response.status_code == 200:
-        data = response.json() 
-        places =data.get("navn", [])
+        data = response.json()
+        places = data.get("navn", [])
         if kommunenavn:
             kommunenavn.capitalize()
             for place in places:
