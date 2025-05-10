@@ -14,14 +14,14 @@ class LocationOperations:
             collections = self.collection.database.list_collection_names()
             return collection_name in collections
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"An error occurred when checking if the collection exists: {e}")
         return False
 
     def create_location(self, location_data: dict):
         try:
             result = self.collection.insert_one(location_data)
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"An error occurred when trying to create a location: {e}")
             return None
         return result.inserted_id
 
@@ -29,7 +29,7 @@ class LocationOperations:
         try:
             location = self.collection.find_one({"name": location_name})
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"An error occurred when retriving a location by name: {e}")
             return None
         return location
 
@@ -37,7 +37,7 @@ class LocationOperations:
         try:
             location = self.collection.find_one({"_id": ObjectId(location_id)})
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"An error occurred when retrieving a location by id: {e}")
             return None
         return location
 

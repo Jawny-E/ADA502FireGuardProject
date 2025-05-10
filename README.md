@@ -23,6 +23,7 @@ This repository is a project completed as part of the ADA502 - Cloud Computing c
 
 <!-- TOC --><a name="getting-started"></a>
 ## Getting started
+
 <!-- TOC --><a name="prerequisites"></a>
 ### Prerequisites
 This approach to running the project is based on you having access to the following technolgies in your environment: git, Docker-Desktop, DockerHub and Postman. You can use similar techonolgies as alternatives if you would like. The project has been tested against the recommended technolgies and we highly recommend them for beginners.
@@ -64,11 +65,21 @@ To access the endpoints requiring authentication you need a JWT-token aquired fr
 ![image](https://github.com/user-attachments/assets/1d840207-bdef-4a7c-ad25-f0eb2f7c5759)
 
 From the POST-request will get the access-token in the response-body. To access endpoints protected by the API you can now send GET-requests to any API with this access token in the body. The figure below shows this completed for the endpoint localhost:8000/api/bergen in Postman. If everything is set up correctly you should get firerisk predictions in the response
+
 ![image](https://github.com/user-attachments/assets/82079123-d36d-4c9c-a44d-31f6079a0239)
 
 
 The token does have a timeout, and you will have to get a new token each time this happens. Just repeat the earlier steps and replace your old token with the new one. 
 
+
+Remember ! To access your login-priviliges you have to use localhost:8080, but when you want to access the api you have to use localhost:8000
+
+Possible URL's that available for this api at this point in time: 
+localhost:8000/
+localhost:8000/public
+localhost:8000/api
+localhost:8000/api/{location}
+localhost:8000/api/{location}/trends
 
 <!-- TOC --><a name="background"></a>
 ## Background
