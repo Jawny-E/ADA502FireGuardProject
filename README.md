@@ -131,7 +131,7 @@ The project uses a single MongoDB database (FireGuardProject) with a collection 
 
 <!-- TOC --><a name="messaging-system"></a>
 ### Messaging System
-The publisher in this project is responsible for fetching fire risk data for various locations and publishing it to a specific MQQTT topics using the HiveMQ Cloud broker. 
+The publisher in this project is responsible for fetching fire risk data for various locations and publishing it to a specific MQTT topics using the HiveMQ Cloud broker. 
 
 It connects to the HiveMQ Cloud broker via secure MQTT communication over TLS and publishes fire risk updates to dynamically generated topics based on the location names (e.g., fireguard/updates/{location_name}). Location data is retrieved from the database, and the fire risk information is obtained via HTTP requests to our REST API. 
 
