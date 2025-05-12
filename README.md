@@ -176,4 +176,4 @@ Unit tests are created using the inbuilt unit.test and pytest modules. This work
 
 Building is completed for the collected FireGuardAPI Docker image, the image is published to DockerHub under: [fireguard-api](https://hub.docker.com/repository/docker/700706/fireguard-api/general)
 
-Development of code on this project has been doe using a GitHub Flow style of branching and commiting. Branches have used a style "scope/change-description", and relevant issues have been linked in the PR text
+Development of code on this project has been done using a GitHub Flow style of branching and commiting. Branches have used a style "scope/change-description", and relevant issues have been linked in the PR text
