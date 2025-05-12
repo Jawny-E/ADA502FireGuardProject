@@ -43,11 +43,12 @@ class PublisherClient:
                                      client_id=self.CLIENT_ID, userdata=None, protocol=paho.MQTTv5)
 
         # Keycloak configuration
-        self.KEYCLOAK_URL = "http://localhost:8080/realms/FireGuard/protocol/openid-connect/token"
-        self.KEYCLOAK_CLIENT_ID = "FireGuardAPI"
-        self.KEYCLOAK_USERNAME = "test"
-        self.KEYCLOAK_PASSWORD = "testing"
-        self.KEYCLOAK_GRANT_TYPE = "password"
+        self.KEYCLOAK_URL = os.environ['KEYCLOAK_URL']
+        self.KEYCLOAK_CLIENT_ID = os.environ['KEYCLOAK_CLIENT_ID']
+        self.KEYCLOAK_USERNAME = os.environ['KEYCLOAK_USERNAME']
+        self.KEYCLOAK_PASSWORD = os.environ['KEYCLOAK_PASSWORD']
+        self.KEYCLOAK_GRANT_TYPE = os.environ['KEYCLOAK_GRANT_TYPE']
+        
         # Enable TLS for secure connection
         self.publisher.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
 
