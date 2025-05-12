@@ -81,11 +81,28 @@ localhost:8000/api
 localhost:8000/api/{location}
 localhost:8000/api/{location}/trends
 
+### Messaging service
+To run the messaging service locally you can do the following:
+1. Make an account in HiveMQ and make a free cluster. 
+2. In the .env file, fill in the connection values from HiveMQ under "Connection Details"
+3. Make a credential in HiveMQ under "Access Management" and fill these values in the .env file. 
+4. Run the Fire risk API
+5. Go into terminal and run the publisher with command "python publisher.py"
+
+You can now go into the Web Client in HiveMQ 
+![Alt text](images/ConnectHiveMQ.png)
+
+Fill in with the credentials made earlier or autogenerate credentials in "Connections Settings". When the client is connected you can now use the interface to subscribe to different topics. The topics are "fireguard/updates/{location_name}" and the location has to be in the database to be able to subscribe to it. When it is published to a topic the message will show in the messages window. 
+Here is an example of topics:
+![Alt text](images/subscribeHiveMQ.png)
+
 <!-- TOC --><a name="background"></a>
 ## Background
 
 <!-- TOC --><a name="overall-architecture"></a>
 ### Overall Architecture
+![Alt text](images/Architecture.png)
+
 This project is setup as containerized services orchastrated through tools such as Docker-Compose or Kubernetes. The following services are planned:
 - API connectionpoint
 - KeyCloak with database for persistent storage
@@ -129,9 +146,16 @@ These components work together to provide a robust and scalable API for fire ris
 
 <!-- TOC --><a name="databases"></a>
 ### Databases
+The project uses a single MongoDB database (FireGuardProject) with a collection named location. Each document in the collection represents a location and its associated fire risk data. As well as coordinates and last time the fire risk for the location was calculated. 
+![Alt text](images/MongoDB.png)
 
 <!-- TOC --><a name="messaging-system"></a>
 ### Messaging System
+The publisher in this project is responsible for fetching fire risk data for various locations and publishing it to a specific MQTT topics using the HiveMQ Cloud broker. 
+
+It connects to the HiveMQ Cloud broker via secure MQTT communication over TLS and publishes fire risk updates to dynamically generated topics based on the location names (e.g., fireguard/updates/{location_name}). Location data is retrieved from the database, and the fire risk information is obtained via HTTP requests to our REST API. 
+
+To avoid redundant computations, the REST API checks wether fire risk data has already been calculated for the current day. If so, it returns the existing data from the database. As a result, it is natural that the publisher sends updates only once per day for each location.s
 
 <!-- TOC --><a name="authentication-and-authorization"></a>
 ### Authentication and Authorization
