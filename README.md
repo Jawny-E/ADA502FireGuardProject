@@ -1,3 +1,5 @@
+# Table of contents
+
 <!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
 - [Introduction](#introduction)
@@ -74,12 +76,6 @@ The token does have a timeout, and you will have to get a new token each time th
 
 Remember ! To access your login-priviliges you have to use localhost:8080, but when you want to access the api you have to use localhost:8000
 
-Possible URL's that available for this api at this point in time: 
-localhost:8000/
-localhost:8000/public
-localhost:8000/api
-localhost:8000/api/{location}
-localhost:8000/api/{location}/trends
 
 ### Messaging service
 To run the messaging service locally you can do the following:
@@ -87,7 +83,8 @@ To run the messaging service locally you can do the following:
 2. In the .env file, fill in the connection values from HiveMQ under "Connection Details"
 3. Make a credential in HiveMQ under "Access Management" and fill these values in the .env file. 
 4. Run the Fire risk API
-5. Go into terminal and run the publisher with command "python publisher.py"
+5. Go into terminal and run the publisher with command `python .\API\messaging\publisher.py`
+
 
 You can now go into the Web Client in HiveMQ 
 ![Alt text](images/ConnectHiveMQ.png)
@@ -129,6 +126,8 @@ This project provides a REST API built using FastAPI. It handles fire risk predi
 - Defines the following endpoints:
    - `/`: Lists all available API routes.
    - `/api/{location}`: Fetches fire risk predictions for a specific location.
+      - **Query Parameters**
+      - `weatherdata` (optional): Include weather data in the response (default: `false`).
    - `/api/{location}/trends`: Provides fire risk trends for a specific location.
    - `/public`: A public endpoint with general information about the API.
 - Implements role-based access control using authentication mechanisms.
