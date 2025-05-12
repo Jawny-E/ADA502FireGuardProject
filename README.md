@@ -129,6 +129,8 @@ This project provides a REST API built using FastAPI. It handles fire risk predi
 - Defines the following endpoints:
    - `/`: Lists all available API routes.
    - `/api/{location}`: Fetches fire risk predictions for a specific location.
+      - **Query Parameters**
+      - `weatherdata` (optional): Include weather data in the response (default: `false`).
    - `/api/{location}/trends`: Provides fire risk trends for a specific location.
    - `/public`: A public endpoint with general information about the API.
 - Implements role-based access control using authentication mechanisms.
