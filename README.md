@@ -162,3 +162,18 @@ To avoid redundant computations, the REST API checks wether fire risk data has a
 
 <!-- TOC --><a name="cicd-and-package-control"></a>
 ### CI/CD and package control
+This project uses GitHub Action workflows as a main tool to complete CI and CD tasks. Our CI is formed as a streamlined pipeline completing **Quality tests -> Unit tests -> Build and Publish**, with structure to add acceptance and system tests. This CI pipeline runs every time a PR is created. The idea is to publish after the unit tests has been completed with a "dev" tag, and then publish under "latest" after acceptance and system testing has been completed. Additional notes for future development:
+- We would like to implement nightly runs to complete updates to the FireRisk database and other small tasks
+- We would like to re-implement GitHub environments which should complement a separation of staging and production, as well as acceptance and system testing
+- We would like to improve our integration between Issues and PRs
+- Add gitlinting to establish rules for how commit-messages and branches should be named
+
+![alt text](images/CI.png)*This shows the CI pipeline as is*
+
+Quality testing is limited to controlling the style of Python code, using the package flake8.
+
+Unit tests are created using the inbuilt unit.test and pytest modules. This workflow simply runs these as is with the expectation that these pass. 
+
+Building is completed for the collected FireGuardAPI Docker image, the image is published to DockerHub under: [fireguard-api](https://hub.docker.com/repository/docker/700706/fireguard-api/general)
+
+Development of code on this project has been doe using a GitHub Flow style of branching and commiting. Branches have used a style "scope/change-description", and relevant issues have been linked in the PR text
