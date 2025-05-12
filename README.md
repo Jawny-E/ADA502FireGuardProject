@@ -158,6 +158,7 @@ To avoid redundant computations, the REST API checks wether fire risk data has a
 
 <!-- TOC --><a name="authentication-and-authorization"></a>
 ### Authentication and Authorization
+For authorization and authentication the FireGuard system uses Keycloak for user authentication and role-based access control. The Keycloak image in docker contains an already defined realm and handles all user login, token issuance, and access management workflows. The backend API is secured using Bearer tokens issued by Keycloak, and endpoints are protected based on user roles to ensure only authorized personnel can access sensitive data. As the project stands now keycloak is managing all users, access and authorization. Some endpoints has restricted access, and can only be reached with the correct JWT that you can get from keycloak if you have the right credentials. 
 
 <!-- TOC --><a name="cicd-and-package-control"></a>
 ### CI/CD and package control
