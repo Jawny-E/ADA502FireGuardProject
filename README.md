@@ -105,7 +105,27 @@ This project is setup as containerized services orchastrated through tools such 
 
 <!-- TOC --><a name="api-structure"></a>
 ### API/Business Logic
-- REST API
+This project provides a REST API built using FastAPI. It handles fire risk predictions, trends, and location data for geographic areas in Norway. The API is structured as follows:
+
+**app.py**:
+- Acts as the main entry point for the FastAPI application.
+- Defines the following endpoints:
+   - `/`: Lists all available API routes.
+   - `/api/{location}`: Fetches fire risk predictions for a specific location.
+   - `/api/{location}/trends`: Provides fire risk trends for a specific location.
+   - `/public`: A public endpoint with general information about the API.
+- Implements role-based access control using authentication mechanisms.
+
+**Fireguard_API.py**:
+   - Contains the core logic for fire risk computation and data handling.
+   - Key functionalities:
+      - **get_fire_risk**: Fetches fire risk predictions for a location and optionally includes weather data.
+      - **get_fire_risk_trends**: Analyzes fire risk trends, including average, maximum, and minimum risk values.
+      - **get_coordinates_from_StedsnavnAPI**: Retrieves geographic coordinates for a location using the StedsnavnAPI.
+      - **clean_data**: Cleans and formats data by replacing invalid values.
+      - **serialize_fire_risk_prediction**: Serializes fire risk prediction objects for storage and processing.
+
+These components work together to provide a robust and scalable API for fire risk management.
 
 <!-- TOC --><a name="databases"></a>
 ### Databases
